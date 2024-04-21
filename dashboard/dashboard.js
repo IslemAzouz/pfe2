@@ -1,36 +1,36 @@
 const firebaseConfig = {
-    apiKey: "AIzaSyCtmUI2aE9DX3Qf-kQFsAyyJVYlRzXV4DQ",
-    authDomain: "smart-irrigation-5787c.firebaseapp.com",
-    databaseURL: "https://smart-irrigation-5787c-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "smart-irrigation-5787c",
-    storageBucket: "smart-irrigation-5787c.appspot.com",
-    messagingSenderId: "970203233021",
-    appId: "1:970203233021:web:9c5aa4daf4ae752f015c94"
-  };
-  
-  firebase.initializeApp(firebaseConfig);
-  var database = firebase.database();
+  apiKey: "AIzaSyBiTff7VOEP-O9pT-Gf0CNOuMm9krgUxRg",
+  authDomain: "smart-irrigation-73976.firebaseapp.com",
+  databaseURL: "https://smart-irrigation-73976-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "smart-irrigation-73976",
+  storageBucket: "smart-irrigation-73976.appspot.com",
+  messagingSenderId: "650361068150",
+  appId: "1:650361068150:web:9579ca9bf06ccb5425dd57"
+};
 
-  function getCurrentTimestamp() {
-    return firebase.database.ServerValue.TIMESTAMP;
-  }
+firebase.initializeApp(firebaseConfig);
+var database = firebase.database();
 
-  database.ref('temperature').once('value', function(snapshot) {
-    var temperatureList = document.getElementById("temperatureList");
-    snapshot.forEach(function(childSnapshot) {
-      var temperatureData = childSnapshot.val();
-      var li = document.createElement("li");
-      li.textContent =  temperatureData.value 
-      temperatureList.appendChild(li);
-    });
+database.ref('temperature').once('value', function(snapshot) {
+  var temperatureList = document.getElementById("temperatureList");
+  console.log("Temperature snapshot:", snapshot.val());
+  var temperatureHTML = "";
+  snapshot.forEach(function(childSnapshot) {
+    console.log("Temperature childSnapshot:", childSnapshot.val());
+    var temperatureData = childSnapshot.val();
+    temperatureHTML += "<li>" + temperatureData.value + "</li>";
   });
+  temperatureList.innerHTML = temperatureHTML;
+});
 
-  database.ref('humidity').once('value', function(snapshot) {
-    var humidityList = document.getElementById("humidityList");
-    snapshot.forEach(function(childSnapshot) {
-      var humidityData = childSnapshot.val();
-      var li = document.createElement("li");
-      li.textContent =   + humidityData.value ;
-      humidityList.appendChild(li);
-    });
+database.ref('humidity').once('value', function(snapshot) {
+  var humidityList = document.getElementById("humidityList");
+  console.log("Humidity snapshot:", snapshot.val());
+  var humidityHTML = "";
+  snapshot.forEach(function(childSnapshot) {
+    console.log("Humidity childSnapshot:", childSnapshot.val());
+    var humidityData = childSnapshot.val();
+    humidityHTML += "<li>" + humidityData.value + "</li>";
   });
+  humidityList.innerHTML = humidityHTML;
+});
