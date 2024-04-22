@@ -11,26 +11,56 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
 
-database.ref('temperature').once('value', function(snapshot) {
-  var temperatureList = document.getElementById("temperatureList");
-  console.log("Temperature snapshot:", snapshot.val());
-  var temperatureHTML = "";
-  snapshot.forEach(function(childSnapshot) {
-    console.log("Temperature childSnapshot:", childSnapshot.val());
-    var temperatureData = childSnapshot.val();
-    temperatureHTML += "<li>" + temperatureData.value + "</li>";
+// Function to parse date and time from the data value
+function parseDateTime(dataValue) {
+  // Check if dataValue is a string
+  if (typeof dataValue !== 'string') {
+    // If not a string, return null or handle appropriately
+    return null;
+  }
+  // Split the data value by colon to separate date/time and value
+  var parts = dataValue.split(': ');
+  // Check if the split was successful
+  if (parts.length < 2) {
+    // If split failed, return null or handle appropriately
+    return null;
+  }
+  // Extract date/time part and remove any leading/trailing spaces
+  var dateTimePart = parts[0].trim();
+  // Extract temperature/humidity value part
+  var valuePart = parts.slice(1).join(': '); // Join remaining parts in case value contains colons
+  // Return an object with date/time and value
+  return { dateTime: dateTimePart, value: valuePart };
+}
+
+// Function to create table row HTML
+function createTableRow(value, date) {
+  return "<tr><td>" + value + "</td><td>" + date + "</td></tr>";
+}
+
+function updateTable(snapshot, tableElement) {
+  var tableHTML = "<tr><th>Value</th><th>Date</th></tr>";
+  var dataArray = Object.entries(snapshot.val()).map(entry => ({ key: entry[0], value: entry[1] }));
+  var startIndex = Math.max(0, dataArray.length - 20); // Starting index to consider for displaying the last 20 entries
+  var dataToShow = dataArray.slice(startIndex); // Get the last 20 entries
+  dataToShow.forEach(function(data) {
+    var rowData = parseDateTime(data.value);
+    if (rowData) {
+      tableHTML += createTableRow(rowData.value, rowData.dateTime);
+    } else {
+      console.error("Invalid data format:", data.value);
+    }
   });
-  temperatureList.innerHTML = temperatureHTML;
+  tableElement.innerHTML = tableHTML;
+}
+
+database.ref('temperature').once('value', function(snapshot) {
+  var temperatureTable = document.getElementById("temperatureTable");
+  updateTable(snapshot, temperatureTable);
 });
 
 database.ref('humidity').once('value', function(snapshot) {
-  var humidityList = document.getElementById("humidityList");
-  console.log("Humidity snapshot:", snapshot.val());
-  var humidityHTML = "";
-  snapshot.forEach(function(childSnapshot) {
-    console.log("Humidity childSnapshot:", childSnapshot.val());
-    var humidityData = childSnapshot.val();
-    humidityHTML += "<li>" + humidityData.value + "</li>";
-  });
-  humidityList.innerHTML = humidityHTML;
+  var humidityTable = document.getElementById("humidityTable");
+  updateTable(snapshot, humidityTable);
 });
+

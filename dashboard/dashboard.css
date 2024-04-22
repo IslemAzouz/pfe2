@@ -28,37 +28,31 @@ h2 {
   margin-top: 20px;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
 }
 
-li {
-  background-color: #fff;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+th, td {
+  border: 1px solid #ffffff;
+  padding: 8px;
+  text-align: left;
 }
 
-#temperatureList {
-  text-align: center;
-  width: 45%;
-}
-
-#temperatureList li {
+th {
   background-color: #17a589;
+  color: white;
 }
 
-/* Styling for Humidity */
-#humidityList {
-  text-align: center;
-  width: 45%;
+tr:nth-child(even) {
+  background-color: #17a589; /* Change this to match the table header background color */
 }
 
-#humidityList li {
-  background-color: #17a589;
+tr:nth-child(odd) {
+  background-color: transparent; /* Change this to match the alternate row background color */
 }
+
 .demarrage-button {
   background-color: #17a589;
   color: white;
@@ -74,3 +68,51 @@ li {
   background-color: #0e6c52;
 }
 
+.table-container {
+  overflow-x: auto;
+  width: 30%;
+}
+.table-container:first-child {
+  margin-right: 5%;
+}
+
+.table-container table {
+  table-layout: fixed;
+}
+
+
+.table-container th,
+.table-container td {
+  width: calc(100% / 3); 
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .table-container {
+    width: 90%;
+    margin-bottom: 20px;
+  }
+}
+
+/* Adjust font sizes for smaller screens */
+@media screen and (max-width: 600px) {
+  h1 {
+    font-size: 24px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  th, td {
+    font-size: 12px;
+  }
+
+  .demarrage-button {
+    font-size: 14px;
+  }
+}
