@@ -2,12 +2,16 @@ const Temp = require("../models/temp.model");
 
 const getTemps = async (req, res) => {
   try {
-    const temps = await Temp.find({}).lean(); 
+    const temps = await Temp.find({})
+      .sort({ createdAt: -1 })
+      .limit(20) 
+      .lean(); 
     res.status(200).json(temps);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 
 const createTemp = async (req, res) => {

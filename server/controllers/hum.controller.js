@@ -2,12 +2,16 @@ const Hum = require("../models/hum.model.js");
 
 const getHums = async (req, res) => {
   try {
-    const hums = await Hum.find({}).lean(); 
+    const hums = await Hum.find({})
+      .sort({ createdAt: -1 }) 
+      .limit(20)
+      .lean(); 
     res.status(200).json(hums);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 
 const createHum = async (req, res) => {
